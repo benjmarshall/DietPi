@@ -61,15 +61,8 @@ jobs:
     steps:
     - name: Build
       run: sudo bash -c "G_GITOWNER=$GITHUB_REPOSITORY_OWNER G_GITBRANCH=$GITHUB_REF_NAME; $(curl -sSf "https://raw.githubusercontent.com/$GITHUB_REPOSITORY_OWNER/DietPi/$GITHUB_REF_NAME/.build/software/squeezelite/container_build.bash")" -- -a '${{ matrix.arch }}' -d '${{ matrix.dist }}'
-    - name: Upload
-      run: |
-        # SSH server and client keys
-        mkdir ~/.ssh
-        umask 377
-        echo '${{ secrets.KNOWN_HOSTS }}' > ~/.ssh/known_hosts
-        echo '${{ secrets.SSH_KEY }}' > ~/.ssh/id_ed25519
-
-        # Upload
-        curl -T 'rootfs/squeezelite_${{ matrix.arch }}.deb' --key ~/.ssh/id_ed25519 '${{ secrets.UPLOAD_URL }}${{ matrix.dist }}/'
-        curl 'https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE }}/purge_cache' -H 'Authorization: Bearer ${{ secrets.CF_TOKEN }}' -H 'Content-Type: application/json' \
-        --data '{"files":["https://dietpi.com/downloads/binaries/${{ matrix.dist }}/testing/","https://dietpi.com/downloads/binaries/${{ matrix.dist }}/testing/squeezelite_${{ matrix.arch }}.deb"]}'
+    - name: Archive deb
+      uses: actions/upload-artifact@v3
+      with:
+        name: squeezelite_${{ matrix.arch }}.deb
+        path: rootfs/squeezelite_${{ matrix.arch }}.deb
