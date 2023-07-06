@@ -22,7 +22,7 @@ G_EXEC tar xf master.tar.gz
 G_EXEC rm master.tar.gz
 G_DIETPI-NOTIFY 2 'Compiling binary...'
 G_EXEC cd squeezelite-master
-G_EXEC_OUTPUT=1 G_EXEC make CFLAGS='-g0 -O3' OPTS='-DDSD -DFFMPEG -DRESAMPLE -DVISEXPORT -DLINKALL -DIR -DUSE_SSL'
+G_EXEC_OUTPUT=1 G_EXEC make CFLAGS='-g0 -O3' OPTS='-DDSD -DFFMPEG -DRESAMPLE -DVISEXPORT -DLINKALL -DIR -DUSE_SSL -DGPIO'
 G_EXEC strip --remove-section=.comment --remove-section=.note squeezelite
 
 G_DIETPI-NOTIFY 2 'Starting packaging...'
